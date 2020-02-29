@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!doctype html>
 <html lang="en">
 
@@ -110,19 +113,19 @@
         echo '<div class="col-md-6">
   <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
     <div class="col p-4 d-flex flex-column position-static">
-      <strong class="d-inline-block mb-2 text-primary">'. htmlspecialchars($donnees["titre"]) .'</strong>
+      <strong class="d-inline-block mb-2 text-primary">' . htmlspecialchars($donnees["titre"]) . '</strong>
       <p class="card-text mb-auto"><a href="index.php">Retour à la liste des billets</a></p>
-      <h2> Commentaire </h2>' ;}
-       
+      <h2> Commentaire </h2>';
+      }
+
       // Récupération des commentaires
       $reqcom = $bdd->prepare('SELECT auteur, commentaire, DATE_FORMAT(date_commentaire, \'%d/%m/%Y à %Hh%imin%ss\') AS date_commentaire_fr FROM commentaires WHERE id_billet = ? ORDER BY date_commentaire');
       $reqcom->execute(array($_GET['billet']));
-      
+
       while ($donneescom = $reqcom->fetch()) {
-      
-        echo '<p><strong>' . htmlspecialchars($donneescom['auteur']) .'</strong> le '. $donneescom['date_commentaire_fr'] . '</p>
-        <p>' .  nl2br(htmlspecialchars($donneescom['commentaire'])) .'</p>';
-      
+
+        echo '<p><strong>' . htmlspecialchars($donneescom['auteur']) . '</strong> le ' . $donneescom['date_commentaire_fr'] . '</p>
+        <p>' .  nl2br(htmlspecialchars($donneescom['commentaire'])) . '</p>';
       } // Fin de la boucle des commentaires
       $req->closeCursor();
       ?>
@@ -134,11 +137,14 @@
       </svg>
     </div>
   </div>
-  </div>
-
-  </bo } ?>
-  </div>
-  </div>
+  
+  <form action="commentaires.php?billet=" methode="post"> 
+        <h1 class="h3 mb-3 font-weight-normal">Votre commentaire</h1>
+        <label for="nom" class="sr-only">Nom</label>
+        <input type="text" name="nom" class="form-control" id="nom" value="<?php if(isset($_SESSION['nom'])){ echo $_SESSION['nom']; } ?>" placeholder="Entrez votre nom (requis)" required autofocus>
+        <textarea name="com" class="form-control" id="com" required rows="5"></textarea>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Envoyer</button>
+      </form>
 
   <footer class="blog-footer">
     <p>
