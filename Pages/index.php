@@ -1,14 +1,25 @@
 <?php
 session_start();
 include_once "../Layouts/base.php";
-
 //Connexion à la base de donnée
 try {
   $bdd = new PDO('mysql:host=localhost:3306;dbname=blog;charset=utf8', 'root', '');
 } catch (Exception $e) {
   die('Erreur: ' . $e->getMessage());
 }
-$billet = $bdd->query('SELECT id,titre,content, DATE_FORMAT(datePost, \'%d/%m/%Y à %Hh%i\') AS datePost_fr FROM billets ORDER BY ID LIMIT 0,5');
+$billetsParPage = 2;
+$billetTotalReq = $bdd->query('SELECT id FROM billets');
+$billetTotal = $billetTotalReq->rowCount();
+$pagesTotal = ceil($billetTotal / $billetsParPage);
+if (isset($_GET['page']) AND !empty($_GET['page']) AND $_GET['page'] > 0 AND $_GET['page'] <= $pagesTotal){
+  $_GET['page'] = intval($_GET['page']);
+  $pageCourante = $_GET['page'];
+} else {
+  $pageCourante = 1;
+}
+$depart = ($pageCourante - 1) * $billetsParPage;
+
+$billet = $bdd->query('SELECT id,titre,content, DATE_FORMAT(datePost, \'%d/%m/%Y à %Hh%i\') AS datePost_fr FROM billets ORDER BY ID LIMIT ' . $depart . ',' . $billetsParPage);
 $donnees = $billet->fetchAll();
 
 ?>
@@ -40,6 +51,33 @@ $donnees = $billet->fetchAll();
       </div>
     </div>
   <?php endforeach ?>
+</div>
+<div class="row mb-2">
+<div class="col-md-12 text-center">
+<?php
+
+  for($i=1;$i<=$pagesTotal;$i++){
+    if($i == $pageCourante){
+      echo $i.' ';
+    }else{
+      echo '<a href="index.php?page='.$i.'">'.$i.'</a> ';
+    }
+  }
+  ?> <?php //test!!
+    $billetParPage = function (){
+    for($i=1;$i<=$billetTotal;$i++){
+    $billetsParPage = $i;
+  }
+  };?>
+  <form action="index.php">
+    <label for="nbpage">Nombre de billets par page:</label>
+    <select name="nbPage" id="nbPage">
+    <?php for($i=1;$i<=$billetTotal;$i++){
+      echo '<option value="$billetsParPage='. $i.'">'.$i.'</option>';
+    }?>
+    </select>
+  </form>
+  
 </div>
 <footer class="blog-footer">
   <p>
