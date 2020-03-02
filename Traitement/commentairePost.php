@@ -7,13 +7,11 @@ try {
   } catch (Exception $e) {
     die('Erreur: ' . $e->getMessage());
   }
-if(isset($_POST['nom'])){
-    $_SESSION['nom'] = $this;
-}
+
 //Insertion du nom et message à l'aide d'une requête préparée
-$req = $bdd->prepare('INSERT INTO commentaire (id_billet,auteur,commentaire) VALUES(?,?,?');
-$req->execute(array($_GET['billet'],$_POST['nom'],$_POST['com']));
+$req = $bdd->prepare('INSERT INTO commentaires (id_billet,auteur,commentaire) VALUES(?,?,?)');
+$req->execute(array($_POST['id'],$_POST['nom'],$_POST['com']));
 
 // Redirection du visiteur vers la page commentaire.php
-header('Location: commentaires.php?billet=' . $_GET['billet']);
+header('Location: ../Pages/commentaires.php?billet=' . htmlspecialchars($_POST['id']));
 ?>
