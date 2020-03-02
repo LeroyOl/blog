@@ -23,17 +23,24 @@ include_once "../Layouts/base.php";
   // Récupération du billet
   $req = $bdd->prepare('SELECT id, titre, content, DATE_FORMAT(datePost, \'Le %d/%m/%Y à %Hh%i\') AS datePost_fr FROM billets WHERE id=?');
   $req->execute(array($_GET['billet']));
-  $donnees = $req->fetch();
-
-
-  echo '<div class="col-md-6">
+  $donnees = $req->fetchAll(); ?>
+<?php 
+if(!empty($donnees)== true){
+  foreach ($donnees as $var):?>
+  <div class="col-md-12">
   <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
     <div class="col p-4 d-flex flex-column position-static">
-      <strong class="d-inline-block mb-2 text-primary">' . htmlspecialchars($donnees["titre"]) . '</strong>
-      <div class="mb-1 text-muted">'. htmlspecialchars($donnees["datePost_fr"]).' </div>
+      <strong class="d-inline-block mb-2 text-primary"><?=htmlspecialchars($var["titre"]) ?>'</strong>
+      <div class="mb-1 text-muted"><?=htmlspecialchars($var["datePost_fr"])?> </div>
       <p class="card-text mb-auto"><a href="index.php">Retour à la liste des billets</a></p>
-      <h2> Commentaire </h2>';
-  
+      <h2> Commentaire </h2>
+  <?php   endforeach;}
+  else{ 
+    echo "La page n'existe pas";
+    
+  }
+  ?>
+  <?php
       // Récupération des commentaires
       $req = $bdd->prepare('SELECT auteur, commentaire, DATE_FORMAT(date_commentaire, \'%d/%m/%Y à %Hh%i\') AS date_commentaire_fr FROM commentaires WHERE id_billet = ? ORDER BY date_commentaire');
       $req->execute(array($_GET['billet']));
@@ -51,16 +58,16 @@ include_once "../Layouts/base.php";
   </svg>
 </div>
 </div>
-
-<form action="../Traitement/commentairePost.php" method="post">
+</div>
+<form class="col-md-12" action="../Traitement/commentairePost.php" method="post">
   <h1 class="h3 mb-3 font-weight-normal">Votre commentaire</h1>
   <label for="nom" class="sr-only">Nom</label>
-  <input type="text" name="nom" class="form-control" id="nom" value="" placeholder="Entrez votre nom (requis)" required autofocus>
+  <input type="text" name="nom" class="form-control" id="nom" value="" placeholder="Entrez votre nom (requis)" required>
   <input type=hidden name=id value="<?= $_GET['billet']; ?>">
   <textarea name="com" class="form-control" id="com" required rows="5"></textarea>
   <button class="btn btn-lg btn-primary btn-block" type="submit">Envoyer</button>
 </form>
-
+</div>
 <footer class="blog-footer">
   <p>
     <a href="#">Back to top</a>
