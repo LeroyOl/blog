@@ -11,7 +11,7 @@ $billetsParPage = 2;
 $billetTotalReq = $bdd->query('SELECT id FROM billets');
 $billetTotal = $billetTotalReq->rowCount();
 $pagesTotal = ceil($billetTotal / $billetsParPage);
-if (isset($_GET['page']) AND !empty($_GET['page']) AND $_GET['page'] > 0 AND $_GET['page'] <= $pagesTotal){
+if (isset($_GET['page']) and !empty($_GET['page']) and $_GET['page'] > 0 and $_GET['page'] <= $pagesTotal) {
   $_GET['page'] = intval($_GET['page']);
   $pageCourante = $_GET['page'];
 } else {
@@ -53,37 +53,31 @@ $donnees = $billet->fetchAll();
   <?php endforeach ?>
 </div>
 <div class="row mb-2">
-<div class="col-md-12 text-center">
-<?php
-
-  for($i=1;$i<=$pagesTotal;$i++){
-    if($i == $pageCourante){
-      echo $i.' ';
-    }else{
-      echo '<a href="index.php?page='.$i.'">'.$i.'</a> ';
+  <div class="col-md-12 text-center">
+    <?php
+    for ($i = 1; $i <= $pagesTotal; $i++) {
+      if ($i == $pageCourante) {
+        echo $i . ' ';
+      } else {
+        echo '<a href="index.php?page=' . $i . '">' . $i . '</a> ';
+      }
     }
-  }
-  ?> <?php //test!!
-    $billetParPage = function (){
-    for($i=1;$i<=$billetTotal;$i++){
-    $billetsParPage = $i;
-  }
-  };?>
-  <form action="index.php">
-    <label for="nbpage">Nombre de billets par page:</label>
-    <select name="nbPage" id="nbPage">
-    <?php for($i=1;$i<=$billetTotal;$i++){
-      echo '<option value="$billetsParPage='. $i.'">'.$i.'</option>';
-    }?>
-    </select>
-  </form>
-  
-</div>
-<footer class="blog-footer">
-  <p>
-    <a href="#">Back to top</a>
-  </p>
-</footer>
-</body>
+    ?>
+    <form action="index.php">
+      <label for="nbpage">Billets/page:</label>
+      <select name="nbPage" id="nbPage">
+        <?php for ($i = 1; $i <= $billetTotal; $i++) {
+          echo '<option value="$billetsParPage=' . $i . '">' . $i . '</option>';
+        } ?>
+      </select>
+    </form>
 
-</html>
+  </div>
+  <footer class="blog-footer">
+    <p>
+      <a href="#">Back to top</a>
+    </p>
+  </footer>
+  </body>
+
+  </html>

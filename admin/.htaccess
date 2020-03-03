@@ -1,0 +1,5 @@
+AuthName "Page d'administration protégée"
+AuthType Basic
+AuthUserFile "D:\Code\Sites\blog\admin\.htpasswd"
+Require valid-user
+
