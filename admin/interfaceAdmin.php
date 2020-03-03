@@ -31,7 +31,7 @@ $donnees = $billet->fetchAll();
     </div>
   </div>
   <div class="row m-5 ">
-    <form class="col-md-4" action="administration.php" method="post">
+    <form class="col-md-4" action="adminPost.php" method="post">
       <h1 class="text-primary h2 mb-5 text-center  ">Ajouter un billet</h1>
       <label for="titreAdd">Ajouter un titre</label>
       <input type="text" class="form-control" name="titreAdd" id="titreAdd" required>
@@ -39,7 +39,7 @@ $donnees = $billet->fetchAll();
       <textarea class="form-control" type="text" name="contentAdd" id="contentAdd" rows="10"></textarea>
       <button class="btn btn-lg btn-primary btn-block" type="submit">Ajouter</button>
     </form>
-    <form class="col-md-4" action="administration.php" method="post">
+    <form class="col-md-4" action="adminPost.php" method="post">
       <h1 class="text-success h2 mb-5 text-center ">Modifier un billet</h1>
       <label for="titreFindMod"> Entrez le titre du billet à modifier</label>
       <input type="text" class="form-control" name="titreFindMod" id="titreFindMod" required>
@@ -49,7 +49,7 @@ $donnees = $billet->fetchAll();
       <textarea class="form-control" type="text" name="contentMod" id="contentMod" required rows="7"></textarea>
       <button class="btn btn-lg btn-success btn-block" type="submit">Modifier</button>
     </form>
-    <form class="col-md-4" action="administration.php" method="post">
+    <form class="col-md-4" action="adminPost.php" method="post">
       <h1 class="text-danger h2 mb-5 text-center ">Supprimer un billet</h1>
       <label for="titreSup">Entrez le titre du billet à supprimer</label>
       <input type="text" class="text-danger form-control" name="titreSup" id="titreSup" placeholder="Attention, ceci détruit le billet définitivement!" required>
