@@ -32,7 +32,7 @@ $donnees = $billet->fetchAll();
   </div>
   <div class="row m-5 ">
     <form class="col-md-4" action="administration.php" method="post">
-      <h1 class="h2 mb-3 text-center font-weight-normal ">Ajouter un billet</h1>
+      <h1 class="text-primary h2 mb-5 text-center  ">Ajouter un billet</h1>
       <label for="titreAdd">Ajouter un titre</label>
       <input type="text" class="form-control" name="titreAdd" id="titreAdd" required>
       <label for="contentAdd" id="contentAdd" name="contentAdd">Contenu du billet</label>
@@ -40,7 +40,7 @@ $donnees = $billet->fetchAll();
       <button class="btn btn-lg btn-primary btn-block" type="submit">Ajouter</button>
     </form>
     <form class="col-md-4" action="administration.php" method="post">
-      <h1 class="h2 mb-3 text-center font-weight-normal">Modifier un billet</h1>
+      <h1 class="text-success h2 mb-5 text-center ">Modifier un billet</h1>
       <label for="titreFindMod"> Entrez le titre du billet à modifier</label>
       <input type="text" class="form-control" name="titreFindMod" id="titreFindMod" required>
       <label for="titreMod">Modifier le titre du billet </label>
@@ -50,9 +50,9 @@ $donnees = $billet->fetchAll();
       <button class="btn btn-lg btn-success btn-block" type="submit">Modifier</button>
     </form>
     <form class="col-md-4" action="administration.php" method="post">
-      <h1 class="h2 mb-3 text-center font-weight-normal">Supprimer un billet</h1>
+      <h1 class="text-danger h2 mb-5 text-center ">Supprimer un billet</h1>
       <label for="titreSup">Entrez le titre du billet à supprimer</label>
-      <input type="text" class="form-control" name="titreSup" id="titreSup" placeholder="Attention, ceci détruit le billet définitivement!" required>
+      <input type="text" class="text-danger form-control" name="titreSup" id="titreSup" placeholder="Attention, ceci détruit le billet définitivement!" required>
       <button class="btn btn-lg btn-danger btn-block" type="submit">Supprimer</button>
       <div class="listbillet border m-5 text-center">
         <h2>Billet sur le site : </h2>
