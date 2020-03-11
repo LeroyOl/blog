@@ -1,27 +1,9 @@
 <?php
 session_start();
-include_once "../Layouts/base.php";
-//Connexion à la base de donnée
-try {
-  $bdd = new PDO('mysql:host=localhost:3306;dbname=blog;charset=utf8', 'root', '');
-} catch (Exception $e) {
-  die('Erreur: ' . $e->getMessage());
-}
-$billetsParPage = 2;
-$billetTotalReq = $bdd->query('SELECT id FROM billets');
-$billetTotal = $billetTotalReq->rowCount();
-$pagesTotal = ceil($billetTotal / $billetsParPage);
-if (isset($_GET['page']) and !empty($_GET['page']) and $_GET['page'] > 0 and $_GET['page'] <= $pagesTotal) {
-  $_GET['page'] = intval($_GET['page']);
-  $pageCourante = $_GET['page'];
-} else {
-  $pageCourante = 1;
-}
-$depart = ($pageCourante - 1) * $billetsParPage;
-
-$billet = $bdd->query('SELECT id,titre,content, DATE_FORMAT(datePost, \'%d/%m/%Y à %Hh%i\') AS datePost_fr FROM billets ORDER BY ID LIMIT ' . $depart . ',' . $billetsParPage);
-$donnees = $billet->fetchAll();
-
+require_once('../Processing/Ticket.php');
+$tickets = getTicket();
+$data = $tickets->fetchAll();
+require "../Layouts/base.php";
 ?>
 
 <div class="jumbotron p-4 p-md-5 text-white rounded bg-dark">
@@ -32,7 +14,7 @@ $donnees = $billet->fetchAll();
   </div>
 </div>
 <div class="row mb-2">
-  <?php foreach ($donnees as $var) : ?>
+  <?php foreach ($data as $var) : ?>
     <div class="col-md-6">
       <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
         <div class="col p-4 d-flex flex-column position-static">
@@ -40,7 +22,7 @@ $donnees = $billet->fetchAll();
           <h3 class="mb-0"><?= $var['titre'] ?></h3>
           <div class="mb-1 text-muted"><?= $var['datePost_fr'] ?></div>
           <p class="card-text mb-auto"><?= $var['content'] ?></p>
-          <em><a href="commentaires.php?billet=<?= $var['id'] ?>">Commentaires</a></em>
+          <em><a href="comments.php?billet=<?= $var['id'] ?>">Commentaires</a></em>
         </div>
         <div class="col-auto d-none d-lg-block">
           <svg class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail">
@@ -63,15 +45,6 @@ $donnees = $billet->fetchAll();
       }
     }
     ?>
-    <form action="index.php">
-      <label for="nbpage">Billets/page:</label>
-      <select name="nbPage" id="nbPage">
-        <?php for ($i = 1; $i <= $billetTotal; $i++) {
-          echo '<option value="$billetsParPage=' . $i . '">' . $i . '</option>';
-        } ?>
-      </select>
-    </form>
-
   </div>
   <footer class="blog-footer">
     <p>

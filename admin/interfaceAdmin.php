@@ -7,7 +7,7 @@ try {
   die('Erreur: ' . $e->getMessage());
 }
 $billet = $bdd->query('SELECT id,titre,content, DATE_FORMAT(datePost, \'%d/%m/%Y à %Hh%i\') AS datePost_fr FROM billets ORDER BY ID ');
-$donnees = $billet->fetchAll();
+$data = $billet->fetchAll();
 
 ?>
 <!doctype html>
@@ -56,7 +56,7 @@ $donnees = $billet->fetchAll();
       <button class="btn btn-lg btn-danger btn-block" type="submit">Supprimer</button>
       <div class="listbillet border m-5 text-center">
         <h2>Billet sur le site : </h2>
-        <?php foreach ($donnees as $var) : ?>
+        <?php foreach ($data as $var) : ?>
           <p><?= $var['titre'] ?></p>
         <?php endforeach ?>
       </div>

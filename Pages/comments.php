@@ -13,14 +13,14 @@ include_once "../Layouts/base.php";
 <div class="row mb-2">
   <?php
 
-  //Connexion à la base de donnée
+  
   try {
     $bdd = new PDO('mysql:host=localhost:3306;dbname=blog;charset=utf8', 'root', '');
   } catch (Exception $e) {
     die('Erreur: ' . $e->getMessage());
   }
 
-  // Récupération du billet
+
   $req = $bdd->prepare('SELECT id, titre, content, DATE_FORMAT(datePost, \'Le %d/%m/%Y à %Hh%i\') AS datePost_fr FROM billets WHERE id=?');
   $req->execute(array($_GET['billet']));
   $donnees = $req->fetchAll();
@@ -79,14 +79,14 @@ include_once "../Layouts/base.php";
                 if ($i == $pageCourante) {
                   echo $i . ' ';
                 } else {
-                  echo '<a href="commentaires.php?billet='.$_GET['billet'].'&page=' . $i . '">' . $i . '</a> ';
+                  echo '<a href="comments.php?billet='.$_GET['billet'].'&page=' . $i . '">' . $i . '</a> ';
                 }
               }
               ?>
             </div>
         </div>
         
-        <form class="col-md-12" action="../Traitement/commentairePost.php" method="post">
+        <form class="col-md-12" action="../Processing/commentsPost.php" method="post">
           <h1 class="h3 mb-3 font-weight-normal">Votre commentaire</h1>
           <label for="nom" class="sr-only">Nom</label>
           <input type="text" name="nom" class="form-control" id="nom" value="" placeholder="Entrez votre nom (requis)" required>
