@@ -1,8 +1,8 @@
 <?php
 session_start();
 require_once('../Processing/Ticket.php');
-$tickets = getTicket();
-$data = $tickets->fetchAll();
+$tickets = new Ticket();
+$data = $tickets->getTicket()->fetchAll();
 require "../Layouts/base.php";
 ?>
 
@@ -37,13 +37,8 @@ require "../Layouts/base.php";
 <div class="row mb-2">
   <div class="col-md-12 text-center">
     <?php
-    for ($i = 1; $i <= $pagesTotal; $i++) {
-      if ($i == $pageCourante) {
-        echo $i . ' ';
-      } else {
-        echo '<a href="index.php?page=' . $i . '">' . $i . '</a> ';
-      }
-    }
+    $pagin = new ticket();
+    $pagin->pagin();
     ?>
   </div>
   <footer class="blog-footer">

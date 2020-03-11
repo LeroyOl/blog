@@ -1,6 +1,9 @@
 <?php
 session_start();
-include_once "../Layouts/base.php";
+require_once('../Processing/Ticket.php');
+$tickets = new Ticket();
+$data = $tickets->getTicket()->fetchAll();
+require "../Layouts/base.php";
 ?>
 
 <div class="jumbotron p-4 p-md-5 text-white rounded bg-dark">
@@ -11,36 +14,10 @@ include_once "../Layouts/base.php";
   </div>
 </div>
 <div class="row mb-2">
+ 
   <?php
-
-  
-  try {
-    $bdd = new PDO('mysql:host=localhost:3306;dbname=blog;charset=utf8', 'root', '');
-  } catch (Exception $e) {
-    die('Erreur: ' . $e->getMessage());
-  }
-
-
-  $req = $bdd->prepare('SELECT id, titre, content, DATE_FORMAT(datePost, \'Le %d/%m/%Y à %Hh%i\') AS datePost_fr FROM billets WHERE id=?');
-  $req->execute(array($_GET['billet']));
-  $donnees = $req->fetchAll();
-  $comsParPage = 5;
-  $comsTotalReq = $bdd->prepare('SELECT id FROM commentaires WHERE id_billet=?');
-  $comsTotalReq->execute(array($_GET['billet']));
-  $comsTotal = $comsTotalReq->rowcount();
-  $pagesTotal = ceil($comsTotal / $comsParPage);
-
-  if (isset($_GET['page']) and !empty($_GET['page']) and $_GET['page'] > 0 and $_GET['page'] <= $pagesTotal) {
-    $_GET['page'] = intval($_GET['page']);
-    $pageCourante = $_GET['page'];
-  } else {
-    $pageCourante = 1;
-  }
-
-  ?>
-  <?php
-  if (!empty($donnees) == true) {
-    foreach ($donnees as $var) : ?>
+  if (!empty($data) == true) {
+    foreach ($data as $var) : ?>
       <div class="col-md-12">
         <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
           <div class="col p-4 d-flex flex-column position-static">
@@ -54,15 +31,15 @@ include_once "../Layouts/base.php";
     }
         ?>
         <?php
-        $depart = ($pageCourante - 1) * $comsParPage;
+        $comment = new Ticket();
+        $data = $comment->getComments();
         // Récupération des commentaires
-        $req = $bdd->prepare('SELECT auteur, commentaire, DATE_FORMAT(date_commentaire, \'%d/%m/%Y à %Hh%i\') AS date_commentaire_fr FROM commentaires WHERE id_billet = ? ORDER BY date_commentaire DESC LIMIT ' . $depart . ',' . $comsParPage);
-        $req->execute(array($_GET['billet']));
-        while ($donnees = $req->fetch()) {
+
+        while ($donnees = $data->fetch()) {
           echo '<p><strong>' . htmlspecialchars($donnees['auteur']) . '</strong> le ' . $donnees['date_commentaire_fr'] . '</p>
         <p>' .  nl2br(htmlspecialchars($donnees['commentaire'])) . '</p>';
         } // Fin de la boucle des commentaires
-        $req->closeCursor();
+        $data->closeCursor();
         ?>
           </div>
             <div class="col-auto d-none d-lg-block">
@@ -75,13 +52,8 @@ include_once "../Layouts/base.php";
           <div class="row mb-2">
             <div class="col-md-12 text-center">
               <?php
-              for ($i = 1; $i <= $pagesTotal; $i++) {
-                if ($i == $pageCourante) {
-                  echo $i . ' ';
-                } else {
-                  echo '<a href="comments.php?billet='.$_GET['billet'].'&page=' . $i . '">' . $i . '</a> ';
-                }
-              }
+              $pagin = new ticket();
+              $pagin->paginComments();
               ?>
             </div>
         </div>
