@@ -3,7 +3,7 @@ require('Database.php');
 
 class ticket extends Database
 {
-
+    
     public function __construct()
     {
     }

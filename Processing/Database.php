@@ -12,7 +12,7 @@ class Database
     {
     }
 
-    protected function connect()
+    public function connect()
     {
         try {
             $bdd = new PDO("mysql:host=$this->dbhost;dbname=$this->dbname;charset=$this->charset", "$this->dbuser", "$this->dbpassword");
