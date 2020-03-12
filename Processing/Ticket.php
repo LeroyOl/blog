@@ -26,6 +26,13 @@ class ticket extends Database
         $req = $prepare->query('SELECT id,titre,content, DATE_FORMAT(datePost, \'%d/%m/%Y à %Hh%i\') AS datePost_fr FROM billets ORDER BY ID LIMIT ' . $depart . ',' . $billetsParPage);
         return $req;
     }
+    public function TicketShow()
+    {
+        $prepare = $this->connect();
+        $req = $prepare->prepare('SELECT id,titre,content, DATE_FORMAT(datePost, \'%d/%m/%Y à %Hh%i\') AS datePost_fr FROM billets WHERE id=?');
+        $req->execute(array($_GET['billet']));
+        return $req;
+    }
     public function getComments()
     {
         $prepare = $this->connect();
