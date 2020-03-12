@@ -6,7 +6,7 @@ catch(Exception $e){
     die('Erreur '. $e->getMessage());
 }
 
-// Ajouter un billet
+// add billet
 if(isset($_POST['titreAdd'],$_POST['contentAdd'])){
 $req = $bdd->prepare('INSERT INTO billets (titre,content) VALUES(?,?)');
 $req->execute(array($_POST['titreAdd'],$_POST['contentAdd']));
@@ -24,7 +24,7 @@ if(isset($_POST['titreMod'],$_POST['contentMod'],$_POST['titreFindMod'])){
 header('Location: interfaceAdmin.php');
 exit();
 }
-// Supprimer un billet
+// delette billet
 if(isset($_POST['titreSup'])){
 $req = $bdd->prepare('DELETE FROM billets WHERE titre=? LIMIT 1');
 $req->execute(array($_POST['titreSup']));

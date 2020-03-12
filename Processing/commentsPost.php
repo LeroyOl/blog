@@ -9,10 +9,10 @@ try {
   }
 
 //Insertion du nom et message à l'aide d'une requête préparée
-$req = $bdd->prepare('INSERT INTO commentaires (id_billet,auteur,commentaire) VALUES(?,?,?)');
+$req = $bdd->prepare('INSERT INTO commentaires (id_post,author,comment) VALUES(?,?,?)');
 $req->execute(array($_POST['id'],$_POST['nom'],$_POST['com']));
 
 // Redirection du visiteur vers la page commentaire.php
-header('Location: ../Pages/comments.php?billet=' . htmlspecialchars($_POST['id']));
+header('Location: ../Pages/comments.php?post=' . htmlspecialchars($_POST['id']));
 exit();
 ?>

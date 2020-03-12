@@ -10,10 +10,10 @@ class ticket extends Database
     public function getTicket()
     {
         $prepare = $this->connect();
-        $billetTotalReq = $prepare->query('SELECT id FROM billets');
-        $billetsParPage = 2;
-        $billetTotal = $billetTotalReq->rowCount();
-        $pagesTotal = ceil($billetTotal / $billetsParPage);
+        $postTotalReq = $prepare->query('SELECT id FROM post');
+        $postsParPage = 2;
+        $postTotal = $postTotalReq->rowCount();
+        $pagesTotal = ceil($postTotal / $postsParPage);
 
         if (isset($_GET['page']) and !empty($_GET['page']) and $_GET['page'] > 0 and $_GET['page'] <= $pagesTotal) {
             $_GET['page'] = intval($_GET['page']);
@@ -22,23 +22,23 @@ class ticket extends Database
             $pageCourante = 1;
         }
 
-        $depart = ($pageCourante - 1) * $billetsParPage;
-        $req = $prepare->query('SELECT id,titre,content, DATE_FORMAT(datePost, \'%d/%m/%Y à %Hh%i\') AS datePost_fr FROM billets ORDER BY ID LIMIT ' . $depart . ',' . $billetsParPage);
+        $depart = ($pageCourante - 1) * $postsParPage;
+        $req = $prepare->query('SELECT id,title,content, DATE_FORMAT(datePost, \'%d/%m/%Y à %Hh%i\') AS datePost_fr FROM post ORDER BY ID LIMIT ' . $depart . ',' . $postsParPage);
         return $req;
     }
     public function TicketShow()
     {
         $prepare = $this->connect();
-        $req = $prepare->prepare('SELECT id,titre,content, DATE_FORMAT(datePost, \'%d/%m/%Y à %Hh%i\') AS datePost_fr FROM billets WHERE id=?');
-        $req->execute(array($_GET['billet']));
+        $req = $prepare->prepare('SELECT id,title,content, DATE_FORMAT(datePost, \'%d/%m/%Y à %Hh%i\') AS datePost_fr FROM post WHERE id=?');
+        $req->execute(array($_GET['post']));
         return $req;
     }
     public function getComments()
     {
         $prepare = $this->connect();
         $comsParPage = 5;
-        $comsTotalReq = $prepare->prepare('SELECT id FROM commentaires WHERE id_billet=?');
-        $comsTotalReq->execute(array($_GET['billet']));
+        $comsTotalReq = $prepare->prepare('SELECT id FROM comments WHERE id_post=?');
+        $comsTotalReq->execute(array($_GET['post']));
         $comsTotal = $comsTotalReq->rowcount();
         $pagesTotal = ceil($comsTotal / $comsParPage);
 
@@ -50,18 +50,18 @@ class ticket extends Database
         }
 
         $depart = ($pageCourante - 1) * $comsParPage;
-        $req = $prepare->prepare('SELECT auteur, commentaire, DATE_FORMAT(date_commentaire, \'%d/%m/%Y à %Hh%i\') AS date_commentaire_fr FROM commentaires WHERE id_billet = ? ORDER BY date_commentaire DESC LIMIT ' . $depart . ',' . $comsParPage);
-        $req->execute(array($_GET['billet']));
+        $req = $prepare->prepare('SELECT author, comment, DATE_FORMAT(date_comments, \'%d/%m/%Y à %Hh%i\') AS date_comments_fr FROM comments WHERE id_post = ? ORDER BY date_comments DESC LIMIT ' . $depart . ',' . $comsParPage);
+        $req->execute(array($_GET['post']));
         return $req;
     }
 
     public function pagin()
     {
         $prepare = $this->connect();
-        $billetTotalReq = $prepare->query('SELECT id FROM billets');
-        $billetsParPage = 2;
-        $billetTotal = $billetTotalReq->rowCount();
-        $pagesTotal = ceil($billetTotal / $billetsParPage);
+        $postTotalReq = $prepare->query('SELECT id FROM post');
+        $postsParPage = 2;
+        $postTotal = $postTotalReq->rowCount();
+        $pagesTotal = ceil($postTotal / $postsParPage);
 
         if (isset($_GET['page']) and !empty($_GET['page']) and $_GET['page'] > 0 and $_GET['page'] <= $pagesTotal) {
             $_GET['page'] = intval($_GET['page']);
@@ -74,7 +74,7 @@ class ticket extends Database
             if ($i == $pageCourante) {
                 echo $i . ' ';
             } else {
-                echo '<a href=/blog/Pages/index.php?page=' . $i . '">' . $i . '</a> ';
+                echo '<a href=/blog/Pages/index.php?page=' . $i . '>' . $i . '</a> ';
             }
         }
     }
@@ -82,8 +82,8 @@ class ticket extends Database
     {
         $prepare = $this->connect();
         $comsParPage = 5;
-        $comsTotalReq = $prepare->prepare('SELECT id FROM commentaires WHERE id_billet=?');
-        $comsTotalReq->execute(array($_GET['billet']));
+        $comsTotalReq = $prepare->prepare('SELECT id FROM comments WHERE id_post=?');
+        $comsTotalReq->execute(array($_GET['post']));
         $comsTotal = $comsTotalReq->rowcount();
         $pagesTotal = ceil($comsTotal / $comsParPage);
 
@@ -98,7 +98,7 @@ class ticket extends Database
             if ($i == $pageCourante) {
                 echo $i . ' ';
             } else {
-                echo '<a href="comments.php?billet=' . $_GET['billet'] . '&page=' . $i . '">' . $i . '</a> ';
+                echo '<a href="comments.php?post=' . $_GET['post'] . '&page=' . $i . '">' . $i . '</a> ';
             }
         }
     }
