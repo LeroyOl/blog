@@ -1,29 +1,18 @@
-<?php ob_start(); 
+<?php $title = htmlspecialchars($post['title']); ?>
 
-  if (!empty($data)) {
-    foreach ($data as $var) : ?>
+<?php ob_start(); ?>
       <div class="col-md-12" id="titre">
         <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
           <div class="col p-4 d-flex flex-column position-static">
-            <strong class="d-inline-block mb-2 text-primary"><?= htmlspecialchars($var["title"]) ?></strong>
-            <div class="mb-1 text-muted"><?= $var["datePost_fr"] ?> </div>
+            <strong class="d-inline-block mb-2 text-primary"><?= htmlspecialchars($post["title"]) ?></strong>
+            <div class="mb-1 text-muted"><?= $post["datePost_fr"] ?> </div>
             <p class="card-text mb-auto"><a href="index.php">Retour à la liste des posts</a></p>
             <h2> Commentaire </h2>
-        <?php endforeach;
-    } else {
-      var_dump($_GET['post']);
-      echo "La page n'existe pas";
-    }
-        ?>
         <?php
-        $comment = new Post();
-        $comments = $comment->getComments();
-        // Récupération des commentaires
-
-        while ($donnees = $comments->fetch()) {
-          echo '<p ><strong>' . htmlspecialchars($donnees['author']) . '</strong> le ' . $donnees['date_comments_fr'] . '</p>
-        <p>' .  nl2br(htmlspecialchars($donnees['comment'])) . '</p>';
-        } // Fin de la boucle des commentaires
+        while ($comment = $comments->fetch()) {
+          echo '<p ><strong>' . htmlspecialchars($comment['author']) . '</strong> le ' . $comment['date_comments_fr'] . '</p>
+        <p>' .  nl2br(htmlspecialchars($comment['comment'])) . '</p>';
+        } 
         $comments->closeCursor();
         ?>
           </div>
@@ -37,17 +26,17 @@
         <div class="row mb-2">
           <div class="col-md-12 text-center">
             <?php
-            $pagin = new Post();
-            $pagin->paginComments();
+            $pagin = new model();
+            $pagin->paginComments($_GET['id']);
             ?>
           </div>
         </div>
 
-        <form class="col-md-12" action="../Processing/commentsPost.php" method="post">
+        <form class="col-md-12" action="../controller/backend.php" method="post">
           <h1 class="h3 mb-3 font-weight-normal">Votre commentaire</h1>
           <label for="nom" class="sr-only">Nom</label>
           <input type="text" name="nom" class="form-control" id="nom" value="" placeholder="Entrez votre nom (requis)" required>
-          <input type=hidden name=id value="<?= $_GET['post']; ?>">
+          <input type=hidden name=id value="<?= $_GET['id']; ?>">
           <textarea name="com" class="form-control" id="com" required rows="5"></textarea>
           <button class="btn btn-lg btn-primary btn-block" type="submit">Envoyer</button>
         </form>

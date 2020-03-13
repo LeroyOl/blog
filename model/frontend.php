@@ -1,9 +1,9 @@
 <?php
-require('Database.php');
+require('../controller/Database.php');
 
-class Post extends Database
+class model extends Database
 {
-    
+
     public function __construct()
     {
     }
@@ -26,19 +26,23 @@ class Post extends Database
         $req = $prepare->query('SELECT id,title,content, DATE_FORMAT(datePost, \'%d/%m/%Y à %Hh%i\') AS datePost_fr FROM post ORDER BY ID LIMIT ' . $depart . ',' . $postsParPage);
         return $req;
     }
-    public function PostShow()
+
+    public function PostShow($postId)
     {
         $bdd = $this->connect();
         $req = $bdd->prepare('SELECT id,title,content, DATE_FORMAT(datePost, \'%d/%m/%Y à %Hh%i\') AS datePost_fr FROM post WHERE id=?');
-        $req->execute(array($_GET['post']));
-        return $req;
+        $req->execute(array($postId));
+        $post = $req->fetch();
+
+        return $post;
     }
-    public function getComments()
+
+    public function getComments($postId)
     {
-        $bdd= $this->connect();
+        $bdd = $this->connect();
         $comsParPage = 5;
         $comsTotalReq = $bdd->prepare('SELECT id FROM comments WHERE id_post=?');
-        $comsTotalReq->execute(array($_GET['post']));
+        $comsTotalReq->execute(array($postId));
         $comsTotal = $comsTotalReq->rowcount();
         $pagesTotal = ceil($comsTotal / $comsParPage);
 
@@ -50,14 +54,15 @@ class Post extends Database
         }
 
         $depart = ($pageCourante - 1) * $comsParPage;
-        $req = $bdd->prepare('SELECT author, comment, DATE_FORMAT(date_comments, \'%d/%m/%Y à %Hh%i\') AS date_comments_fr FROM comments WHERE id_post = ? ORDER BY date_comments DESC LIMIT ' . $depart . ',' . $comsParPage);
-        $req->execute(array($_GET['post']));
-        return $req;
+        $comments = $bdd->prepare('SELECT author, comment, DATE_FORMAT(date_comments, \'%d/%m/%Y à %Hh%i\') AS date_comments_fr FROM comments WHERE id_post = ? ORDER BY date_comments DESC LIMIT ' . $depart . ',' . $comsParPage);
+        $comments->execute(array($postId));
+
+        return $comments;
     }
 
     public function pagin()
     {
-        $bdd= $this->connect();
+        $bdd = $this->connect();
         $postTotalReq = $bdd->query('SELECT id FROM post');
         $postsParPage = 2;
         $postTotal = $postTotalReq->rowCount();
@@ -74,16 +79,16 @@ class Post extends Database
             if ($i == $pageCourante) {
                 echo $i . ' ';
             } else {
-                echo '<a href=/blog/Pages/index.php?page=' . $i . '>' . $i . '</a> ';
+                echo '<a href=/blog/view/index.php?page=' . $i . '>' . $i . '</a> ';
             }
         }
     }
-    public function paginComments()
+    public function paginComments($postId)
     {
-        $bdd= $this->connect();
+        $bdd = $this->connect();
         $comsParPage = 5;
         $comsTotalReq = $bdd->prepare('SELECT id FROM comments WHERE id_post=?');
-        $comsTotalReq->execute(array($_GET['post']));
+        $comsTotalReq->execute(array($postId));
         $comsTotal = $comsTotalReq->rowcount();
         $pagesTotal = ceil($comsTotal / $comsParPage);
 
@@ -98,8 +103,17 @@ class Post extends Database
             if ($i == $pageCourante) {
                 echo $i . ' ';
             } else {
-                echo '<a href="comments.php?post=' . $_GET['post'] . '&page=' . $i . '&#titre">' . $i . '</a> ';
+                echo '<a href="index.php?action=post&amp;id=' . $postId . '&page=' . $i . '&#titre">' . $i . '</a> ';
             }
         }
+    }
+    public function pushcoms()
+    {
+        $bdd = $this->connect();
+        $req = $bdd->prepare('INSERT INTO comments (id_post,author,comment) VALUES(?,?,?)');
+        $req->execute(array($_POST['id'], $_POST['nom'], $_POST['com']));
+
+        header('Location: ../view/index.php?action=post&amp&id='.$_POST['id'].'&#titre"');
+        exit();
     }
 }

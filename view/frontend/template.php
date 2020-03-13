@@ -82,6 +82,6 @@
     <?=$content?>
     </div>
   </div>
-  <?php require '../Layouts/Parts/footer.php';?>
+  <?php require 'Parts/footer.php';?>
 </body>
 </html>
