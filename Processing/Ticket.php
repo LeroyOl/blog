@@ -98,7 +98,7 @@ class ticket extends Database
             if ($i == $pageCourante) {
                 echo $i . ' ';
             } else {
-                echo '<a href="comments.php?post=' . $_GET['post'] . '&page=' . $i . '">' . $i . '</a> ';
+                echo '<a href="comments.php?post=' . $_GET['post'] . '&page=' . $i . '&#titre">' . $i . '</a> ';
             }
         }
     }

@@ -4,20 +4,10 @@ require_once('../Processing/Ticket.php');
 $tickets = new Ticket();
 $data = $tickets->TicketShow()->fetchAll();
 require "../Layouts/base.php";
-?>
-<div class="jumbotron p-4 p-md-5 text-white rounded bg-dark">
-  <div class="col-md-6 px-0">
-    <h1 class="display-4 font-italic">Title of a longer featured blog post</h1>
-    <p class="lead my-3">Multiple lines of text that form the lede, informing new readers quickly and efficiently about what’s most interesting in this post’s contents.</p>
-    <p class="lead mb-0"><a href="#" class="text-white font-weight-bold">Continue reading...</a></p>
-  </div>
-</div>
-<div class="row mb-2">
 
-  <?php
   if (!empty($data)) {
     foreach ($data as $var) : ?>
-      <div class="col-md-12">
+      <div class="col-md-12" id="titre">
         <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
           <div class="col p-4 d-flex flex-column position-static">
             <strong class="d-inline-block mb-2 text-primary"><?= htmlspecialchars($var["title"]) ?></strong>
@@ -36,7 +26,7 @@ require "../Layouts/base.php";
         // Récupération des commentaires
 
         while ($donnees = $comments->fetch()) {
-          echo '<p><strong>' . htmlspecialchars($donnees['author']) . '</strong> le ' . $donnees['date_comments_fr'] . '</p>
+          echo '<p ><strong>' . htmlspecialchars($donnees['author']) . '</strong> le ' . $donnees['date_comments_fr'] . '</p>
         <p>' .  nl2br(htmlspecialchars($donnees['comment'])) . '</p>';
         } // Fin de la boucle des commentaires
         $comments->closeCursor();
@@ -67,11 +57,4 @@ require "../Layouts/base.php";
           <button class="btn btn-lg btn-primary btn-block" type="submit">Envoyer</button>
         </form>
       </div>
-      <footer class="blog-footer">
-        <p>
-          <a href="#">Back to top</a>
-        </p>
-      </footer>
-      </body>
-
-      </html>
+      <?php require ('../Layouts/Parts/footer.php');?>
