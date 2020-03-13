@@ -1,13 +1,13 @@
 <?php
 require('Database.php');
 
-class ticket extends Database
+class Post extends Database
 {
     
     public function __construct()
     {
     }
-    public function getTicket()
+    public function getPost()
     {
         $prepare = $this->connect();
         $postTotalReq = $prepare->query('SELECT id FROM post');
@@ -26,18 +26,18 @@ class ticket extends Database
         $req = $prepare->query('SELECT id,title,content, DATE_FORMAT(datePost, \'%d/%m/%Y à %Hh%i\') AS datePost_fr FROM post ORDER BY ID LIMIT ' . $depart . ',' . $postsParPage);
         return $req;
     }
-    public function TicketShow()
+    public function PostShow()
     {
-        $prepare = $this->connect();
-        $req = $prepare->prepare('SELECT id,title,content, DATE_FORMAT(datePost, \'%d/%m/%Y à %Hh%i\') AS datePost_fr FROM post WHERE id=?');
+        $bdd = $this->connect();
+        $req = $bdd->prepare('SELECT id,title,content, DATE_FORMAT(datePost, \'%d/%m/%Y à %Hh%i\') AS datePost_fr FROM post WHERE id=?');
         $req->execute(array($_GET['post']));
         return $req;
     }
     public function getComments()
     {
-        $prepare = $this->connect();
+        $bdd= $this->connect();
         $comsParPage = 5;
-        $comsTotalReq = $prepare->prepare('SELECT id FROM comments WHERE id_post=?');
+        $comsTotalReq = $bdd->prepare('SELECT id FROM comments WHERE id_post=?');
         $comsTotalReq->execute(array($_GET['post']));
         $comsTotal = $comsTotalReq->rowcount();
         $pagesTotal = ceil($comsTotal / $comsParPage);
@@ -50,15 +50,15 @@ class ticket extends Database
         }
 
         $depart = ($pageCourante - 1) * $comsParPage;
-        $req = $prepare->prepare('SELECT author, comment, DATE_FORMAT(date_comments, \'%d/%m/%Y à %Hh%i\') AS date_comments_fr FROM comments WHERE id_post = ? ORDER BY date_comments DESC LIMIT ' . $depart . ',' . $comsParPage);
+        $req = $bdd->prepare('SELECT author, comment, DATE_FORMAT(date_comments, \'%d/%m/%Y à %Hh%i\') AS date_comments_fr FROM comments WHERE id_post = ? ORDER BY date_comments DESC LIMIT ' . $depart . ',' . $comsParPage);
         $req->execute(array($_GET['post']));
         return $req;
     }
 
     public function pagin()
     {
-        $prepare = $this->connect();
-        $postTotalReq = $prepare->query('SELECT id FROM post');
+        $bdd= $this->connect();
+        $postTotalReq = $bdd->query('SELECT id FROM post');
         $postsParPage = 2;
         $postTotal = $postTotalReq->rowCount();
         $pagesTotal = ceil($postTotal / $postsParPage);
@@ -80,9 +80,9 @@ class ticket extends Database
     }
     public function paginComments()
     {
-        $prepare = $this->connect();
+        $bdd= $this->connect();
         $comsParPage = 5;
-        $comsTotalReq = $prepare->prepare('SELECT id FROM comments WHERE id_post=?');
+        $comsTotalReq = $bdd->prepare('SELECT id FROM comments WHERE id_post=?');
         $comsTotalReq->execute(array($_GET['post']));
         $comsTotal = $comsTotalReq->rowcount();
         $pagesTotal = ceil($comsTotal / $comsParPage);
