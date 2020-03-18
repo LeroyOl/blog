@@ -107,13 +107,13 @@ class model extends Database
             }
         }
     }
-    public function pushcoms()
-    {
-        $bdd = $this->connect();
-        $req = $bdd->prepare('INSERT INTO comments (id_post,author,comment) VALUES(?,?,?)');
-        $req->execute(array($_POST['id'], $_POST['nom'], $_POST['com']));
 
-        header('Location: ../view/index.php?action=post&amp&id='.$_POST['id'].'&#titre"');
-        exit();
+    public function postComment($postId, $author, $comment)
+    {   
+        $db = $this->Connect();
+        $comments = $db->prepare('INSERT INTO comments(id_post, author, comment, date_comments) VALUES(?, ?, ?, NOW())');
+        $affectedLines = $comments->execute(array($postId, $author, $comment));
+    
+        return $affectedLines;
     }
 }

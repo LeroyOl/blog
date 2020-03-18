@@ -6,7 +6,7 @@ try {
 } catch (Exception $e) {
   die('Erreur: ' . $e->getMessage());
 }
-$billet = $bdd->query('SELECT id,titre,content, DATE_FORMAT(datePost, \'%d/%m/%Y à %Hh%i\') AS datePost_fr FROM billets ORDER BY ID ');
+$billet = $bdd->query('SELECT id,title,content, DATE_FORMAT(datePost, \'%d/%m/%Y à %Hh%i\') AS datePost_fr FROM post ORDER BY ID ');
 $data = $billet->fetchAll();
 
 ?>
@@ -57,7 +57,7 @@ $data = $billet->fetchAll();
       <div class="listbillet border m-5 text-center">
         <h2>Billet sur le site : </h2>
         <?php foreach ($data as $var) : ?>
-          <p><?= $var['titre'] ?></p>
+          <p><?= $var['title'] ?></p>
         <?php endforeach ?>
       </div>
     </form>

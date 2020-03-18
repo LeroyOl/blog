@@ -32,12 +32,11 @@
           </div>
         </div>
 
-        <form class="col-md-12" action="../controller/backend.php" method="post">
+        <form class="col-md-12" action="index.php?action=addComment&amp;id=<?= $post['id'] ?>" method="post">
           <h1 class="h3 mb-3 font-weight-normal">Votre commentaire</h1>
-          <label for="nom" class="sr-only">Nom</label>
-          <input type="text" name="nom" class="form-control" id="nom" value="" placeholder="Entrez votre nom (requis)" required>
-          <input type=hidden name=id value="<?= $_GET['id']; ?>">
-          <textarea name="com" class="form-control" id="com" required rows="5"></textarea>
+          <label for="author" class="sr-only">Nom</label>
+          <input type="text" name="author" class="form-control" id="author" value="" placeholder="Entrez votre nom (requis)" required>
+          <textarea name="comment" class="form-control" id="comment" required rows="5"></textarea>
           <button class="btn btn-lg btn-primary btn-block" type="submit">Envoyer</button>
         </form>
       </div>
